@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+.DS_Store
+access_review_report.txt
+access_review_report.csv
+access_review_report.pdf

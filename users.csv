@@ -1,0 +1,7 @@
+name,department,last_login,mfa_enabled
+Alice Johnson,Engineering,2026-07-25,yes
+Bob Smith,Sales,2026-03-01,no
+Carol Diaz,Finance,2026-07-28,yes
+David Lee,Engineering,2026-02-15,yes
+Emma Chen,HR,2026-07-20,no
+Frank Ortiz,Sales,2026-04-10,yes
