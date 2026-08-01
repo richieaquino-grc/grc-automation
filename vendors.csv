@@ -1,0 +1,8 @@
+name,data_access_level,last_assessment_date,soc2_on_file
+Acme Cloud Storage,critical,2025-06-15,yes
+Bright Payroll Co,high,2026-07-01,yes
+DataSync Analytics,medium,2024-01-10,yes
+GreenLeaf Marketing,low,2023-05-20,no
+NorthStar IT Support,medium,2025-08-01,yes
+Quantum Backup Services,critical,2025-03-01,no
+Vertex Consulting,low,2025-01-10,yes

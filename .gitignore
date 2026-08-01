@@ -4,3 +4,6 @@ __pycache__/
 access_review_report.txt
 access_review_report.csv
 access_review_report.pdf
+vendor_risk_*.csv
+vendor_risk_*.txt
+vendor_risk_*.pdf
