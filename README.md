@@ -40,3 +40,47 @@ users.csv contains sample user records with columns: name, department, last_logi
 ## SOC 2 relevance
 
 This maps to CC6 — Logical and Physical Access Controls, specifically the requirements that access is authenticated (MFA) and periodically reviewed for accounts that are no longer active (stale access).
+
+---
+
+# Vendor Risk Scorer
+
+A Python script that automates a Third-Party Risk Management (TPRM) control test by reviewing vendor risk data and flagging overdue assessments and missing SOC 2 reports.
+
+## What it does
+
+Reads a list of vendors and evaluates each one against two checks:
+
+- SOC 2 on file — flags any vendor without a SOC 2 report on record, regardless of risk tier.
+- Assessment currency — flags any vendor whose last risk assessment is overdue, based on a tiered cadence:
+  - critical / high risk: reassess annually
+  - medium / low risk: reassess every 2 years
+
+Every vendor receives an explicit PASS or FAIL on both checks.
+
+## Output formats
+
+Each run generates a dated set of reports, so nothing is ever overwritten and a full history is preserved:
+
+- vendor_risk_YYYY-MM-DD.txt — plain-text summary
+- vendor_risk_YYYY-MM-DD.csv — spreadsheet-friendly format
+- vendor_risk_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
+
+Keeping a dated file per run builds an evidence trail — an auditor asking "show me the vendor review from Q1" can be answered by pulling the exact file from that date.
+
+## How to run it
+
+1. Activate the virtual environment (see setup above) and make sure fpdf2 is installed.
+2. Run the script:
+
+python vendor_risk.py
+
+3. Check the generated dated report files in the project folder.
+
+## Input data
+
+vendors.csv contains sample vendor records with columns: name, data_access_level, last_assessment_date, soc2_on_file.
+
+## SOC 2 / TPRM relevance
+
+This reflects a Third-Party Risk Management control test, verifying that vendors with access to company data are appropriately vetted (SOC 2 report on file) and periodically reassessed based on the risk they pose (tiered by data access level).
