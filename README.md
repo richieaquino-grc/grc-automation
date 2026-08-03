@@ -84,3 +84,52 @@ vendors.csv contains sample vendor records with columns: name, data_access_level
 ## SOC 2 / TPRM relevance
 
 This reflects a Third-Party Risk Management control test, verifying that vendors with access to company data are appropriately vetted (SOC 2 report on file) and periodically reassessed based on the risk they pose (tiered by data access level).
+
+---
+
+# IAM Auditor
+
+A Python script that uses boto3 to pull live IAM user data directly from AWS and run a SOC 2 CC6 control test against it, rather than reading from a static file.
+
+## What it does
+
+Connects to AWS using the IAM API and evaluates every IAM user in the account against two checks:
+
+- MFA enforcement — flags any user without a registered MFA device.
+- Access freshness — flags any user whose console password hasn't been used within 90 days.
+
+Every user receives an explicit PASS or FAIL on both checks.
+
+## Output format
+
+Each run generates a dated CSV report:
+
+- iam_audit_YYYY-MM-DD.csv
+
+Same evidence-trail approach as the Vendor Risk Scorer — nothing is overwritten, so a history of audits builds up over time.
+
+## How to run it
+
+1. Create an IAM user with an access key (not the AWS root account) and set the following as environment variables:
+
+export AWS_ACCESS_KEY_ID="your_access_key_id"
+export AWS_SECRET_ACCESS_KEY="your_secret_access_key"
+export AWS_DEFAULT_REGION="your_region"
+
+2. Install boto3:
+
+pip install boto3
+
+3. Run the script:
+
+python iam_auditor.py
+
+4. Check the generated dated report file in the project folder.
+
+## SOC 2 relevance
+
+This maps to CC6 — Logical and Physical Access Controls, applied directly against a live AWS account instead of sample data: verifying MFA is enforced and that IAM users are actively and recently used, flagging stale or unused accounts.
+
+## A note on credentials
+
+This script authenticates using environment variables, never hardcoded keys. AWS access keys and secrets should never be committed to source control — this repo's .gitignore is configured to keep credential files and dated report output out of version control.
