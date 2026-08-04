@@ -10,3 +10,6 @@ vendor_risk_*.pdf
 iam_audit_*.csv
 iam_audit_*.txt
 iam_audit_*.pdf
+s3_audit_*.csv
+s3_audit_*.txt
+s3_audit_*.pdf

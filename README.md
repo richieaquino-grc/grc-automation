@@ -135,3 +135,43 @@ This maps to CC6 — Logical and Physical Access Controls, applied directly agai
 ## A note on credentials
 
 This script authenticates using environment variables, never hardcoded keys. AWS access keys and secrets should never be committed to source control — this repo's .gitignore is configured to keep credential files and dated report output out of version control.
+
+---
+
+# S3 Bucket Checker
+
+A Python script that uses boto3 to pull live S3 bucket configuration from AWS and check two data protection controls: encryption at rest and public access blocking.
+
+## What it does
+
+Connects to AWS via the S3 API and evaluates every bucket in the account against two checks:
+
+- Encryption — flags any bucket without server-side encryption configured.
+- Public access blocked — flags any bucket that doesn't have public access blocking fully enabled, or has no public access block configuration at all.
+
+Every bucket receives an explicit PASS or FAIL on both checks.
+
+## Output formats
+
+Each run generates a dated set of reports:
+
+- s3_audit_YYYY-MM-DD.txt — plain-text summary
+- s3_audit_YYYY-MM-DD.csv — spreadsheet-friendly format
+- s3_audit_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
+
+## How to run it
+
+1. Set AWS credentials as environment variables (see IAM Auditor setup above).
+2. Install boto3 and fpdf2 if not already installed:
+
+pip install boto3 fpdf2
+
+3. Run the script:
+
+python s3_checker.py
+
+4. Check the generated dated report files in the project folder.
+
+## SOC 2 relevance
+
+This reflects a data protection control test, verifying that storage resources enforce encryption at rest and are not inadvertently exposed to the public internet — both common SOC 2 and general security findings when misconfigured.
