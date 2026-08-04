@@ -100,11 +100,13 @@ Connects to AWS using the IAM API and evaluates every IAM user in the account ag
 
 Every user receives an explicit PASS or FAIL on both checks.
 
-## Output format
+## Output formats
 
-Each run generates a dated CSV report:
+Each run generates a dated set of reports, matching the format of the other projects in this repo:
 
-- iam_audit_YYYY-MM-DD.csv
+- iam_audit_YYYY-MM-DD.txt — plain-text summary
+- iam_audit_YYYY-MM-DD.csv — spreadsheet-friendly format
+- iam_audit_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
 
 Same evidence-trail approach as the Vendor Risk Scorer — nothing is overwritten, so a history of audits builds up over time.
 

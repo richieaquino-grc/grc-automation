@@ -1,6 +1,7 @@
 import csv
 import boto3
 from datetime import datetime, timedelta, timezone
+from fpdf import FPDF
 
 iam = boto3.client("iam")
 
@@ -42,3 +43,40 @@ with open(csv_filename, "w", newline="") as csv_report:
         writer.writerow(finding)
 
 print("Report written to " + csv_filename)
+txt_filename = "iam_audit_" + today_str + ".txt"
+
+with open(txt_filename, "w") as txt_report:
+    txt_report.write("IAM Audit Report\n")
+    txt_report.write("Generated: " + today_str + "\n\n")
+
+    for finding in all_findings:
+        txt_report.write(finding["username"] + "\n")
+        txt_report.write("  MFA: " + finding["mfa_status"] + "\n")
+        txt_report.write("  Freshness: " + finding["freshness_status"] + "\n\n")
+
+print("Report written to " + txt_filename)
+pdf_filename = "iam_audit_" + today_str + ".pdf"
+
+pdf = FPDF()
+pdf.add_page()
+
+pdf.set_font("Helvetica", "B", 16)
+pdf.cell(0, 10, "IAM Audit Report", new_x="LMARGIN", new_y="NEXT")
+
+pdf.set_font("Helvetica", "", 10)
+pdf.cell(0, 8, "Generated: " + today_str, new_x="LMARGIN", new_y="NEXT")
+pdf.ln(5)
+
+pdf.set_font("Helvetica", "B", 10)
+pdf.cell(70, 8, "Username", border=1)
+pdf.cell(50, 8, "MFA", border=1)
+pdf.cell(50, 8, "Freshness", border=1, new_x="LMARGIN", new_y="NEXT")
+
+pdf.set_font("Helvetica", "", 10)
+for finding in all_findings:
+    pdf.cell(70, 8, finding["username"], border=1)
+    pdf.cell(50, 8, finding["mfa_status"], border=1)
+    pdf.cell(50, 8, finding["freshness_status"], border=1, new_x="LMARGIN", new_y="NEXT")
+
+pdf.output(pdf_filename)
+print("Report written to " + pdf_filename)
