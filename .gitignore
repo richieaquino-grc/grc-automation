@@ -13,3 +13,6 @@ iam_audit_*.pdf
 s3_audit_*.csv
 s3_audit_*.txt
 s3_audit_*.pdf
+unused_access_*.csv
+unused_access_*.txt
+unused_access_*.pdf

@@ -175,3 +175,40 @@ python s3_checker.py
 ## SOC 2 relevance
 
 This reflects a data protection control test, verifying that storage resources enforce encryption at rest and are not inadvertently exposed to the public internet — both common SOC 2 and general security findings when misconfigured.
+
+---
+
+# Unused Access Key Finder
+
+A Python script that uses boto3 to check every IAM access key in the account and flag ones that haven't been used in the last 90 days — a common finding in access reviews, since unused live credentials carry risk without providing business value.
+
+## What it does
+
+Loops through every IAM user and every access key belonging to that user, checking each key's last-used timestamp (as reported by AWS itself) against a 90-day cutoff. Keys that have never been used at all are also flagged, since a key with zero usage history is exactly the kind of unnecessary standing access an audit should catch.
+
+Every key receives an explicit PASS or FAIL, along with its current status (Active/Inactive).
+
+## Output formats
+
+Each run generates a dated set of reports:
+
+- unused_access_YYYY-MM-DD.txt — plain-text summary
+- unused_access_YYYY-MM-DD.csv — spreadsheet-friendly format
+- unused_access_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
+
+## How to run it
+
+1. Set AWS credentials as environment variables (see IAM Auditor setup above).
+2. Install boto3 and fpdf2 if not already installed:
+
+pip install boto3 fpdf2
+
+3. Run the script:
+
+python unused_access_finder.py
+
+4. Check the generated dated report files in the project folder.
+
+## SOC 2 relevance
+
+This maps to CC6 — Logical and Physical Access Controls, specifically the principle of least privilege and periodic access review: credentials that exist but are never used represent unnecessary risk and should be identified, reviewed, and deactivated or removed.
