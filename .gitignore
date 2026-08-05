@@ -16,3 +16,6 @@ s3_audit_*.pdf
 unused_access_*.csv
 unused_access_*.txt
 unused_access_*.pdf
+cross_system_review_*.csv
+cross_system_review_*.txt
+cross_system_review_*.pdf

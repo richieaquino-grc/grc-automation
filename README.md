@@ -211,4 +211,46 @@ python unused_access_finder.py
 
 ## SOC 2 relevance
 
-This maps to CC6 — Logical and Physical Access Controls, specifically the principle of least privilege and periodic access review: credentials that exist but are never used represent unnecessary risk and should be identified, reviewed, and deactivated or removed.
+This maps to CC6 — Logical and Physical Access Controls, specifically the principle of least privilege and periodic access review: credentials that exist but are never used represent unnecessary risk and should be identified, reviewed, and deactivated or removed.git status
+
+---
+
+# Cross-System Access Review
+
+A Python script that cross-references live AWS IAM users against a company HR roster to catch a common and high-risk finding: employees who have left the company but still have active access to a system.
+
+## What it does
+
+Pulls the real, live list of IAM users from AWS via boto3, and reads a simulated HR roster (150 employees, representing a realistic company headcount) from a CSV. For each AWS account, it checks whether that account belongs to a currently active employee, a terminated employee (an orphaned account), or an account with no matching HR record at all.
+
+Known service and admin accounts (accounts that don't map 1:1 to an individual employee, such as an AWS admin account) are maintained in an explicit, documented exception list rather than being treated as false positives — a standard real-world audit practice.
+
+## Output formats
+
+Each run generates a dated set of reports:
+
+- cross_system_review_YYYY-MM-DD.txt — plain-text summary
+- cross_system_review_YYYY-MM-DD.csv — spreadsheet-friendly format
+- cross_system_review_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
+
+## How to run it
+
+1. Set AWS credentials as environment variables (see IAM Auditor setup above).
+2. Install boto3 and fpdf2 if not already installed:
+
+pip install boto3 fpdf2
+
+3. Ensure hr_roster.csv is present in the project folder (columns: name, department, status).
+4. Run the script:
+
+python cross_system_review.py
+
+5. Check the generated dated report files in the project folder.
+
+## SOC 2 relevance
+
+This directly reflects a core offboarding/deprovisioning control under CC6 — Logical and Physical Access Controls: verifying that access is promptly revoked when an employee's status changes, and that every system account can be tied back to a known, currently active identity or a documented exception.
+
+## A note on the data
+
+The HR roster (hr_roster.csv) is synthetic data generated for this project and does not represent any real company or individuals. The AWS side of this comparison is live, real data pulled from a personal AWS lab account.
