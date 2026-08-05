@@ -1,3 +1,21 @@
+# GRC Automation Portfolio
+
+A collection of Python scripts automating SOC 2 control tests and access reviews, built as a hands-on learning project to transition from traditional GRC into GRC engineering. Each project follows the same core pattern: pull data (from a file or a live API), apply a compliance rule, and report findings in text, CSV, and PDF formats with a dated evidence trail.
+
+## Project structure
+
+Each project lives in its own folder. To run a script, `cd` into its folder first, since scripts read and write files relative to the current directory:
+
+- project-01-access-review/ — SOC 2 CC6 access review (MFA + stale login checks)
+- project-02-vendor-risk-scorer/ — TPRM vendor risk scoring with dated evidence trail
+- project-03-github-api/ — Public and authenticated API calls against GitHub
+- project-04-iam-auditor/ — Live AWS IAM audit (MFA + password freshness) via boto3
+- project-04-s3-checker/ — Live AWS S3 bucket audit (encryption + public access)
+- project-04-unused-access-finder/ — Live AWS IAM access key usage audit
+- project-05-cross-system-review/ — AWS IAM cross-referenced against a synthetic HR roster
+
+---
+
 # Access Review Automation
 
 A Python script that automates a SOC 2 CC6 (Logical Access) control test by reviewing user access data and flagging control failures.
@@ -21,8 +39,9 @@ Running the script generates the same findings in three formats:
 
 ## How to run it
 
-1. Clone this repo and set up a virtual environment:
+1. From the repo root, move into this project's folder and set up a virtual environment:
 
+cd project-01-access-review
 python3 -m venv venv
 source venv/bin/activate
 pip install fpdf2
@@ -31,7 +50,7 @@ pip install fpdf2
 
 python access_review.py
 
-3. Check the generated report files in the project folder.
+3. Check the generated report files in this folder.
 
 ## Input data
 
@@ -70,12 +89,18 @@ Keeping a dated file per run builds an evidence trail — an auditor asking "sho
 
 ## How to run it
 
-1. Activate the virtual environment (see setup above) and make sure fpdf2 is installed.
+1. From the repo root, move into this project's folder, activate a virtual environment, and make sure fpdf2 is installed:
+
+cd project-02-vendor-risk-scorer
+python3 -m venv venv
+source venv/bin/activate
+pip install fpdf2
+
 2. Run the script:
 
 python vendor_risk.py
 
-3. Check the generated dated report files in the project folder.
+3. Check the generated dated report files in this folder.
 
 ## Input data
 
@@ -84,6 +109,38 @@ vendors.csv contains sample vendor records with columns: name, data_access_level
 ## SOC 2 / TPRM relevance
 
 This reflects a Third-Party Risk Management control test, verifying that vendors with access to company data are appropriately vetted (SOC 2 report on file) and periodically reassessed based on the risk they pose (tiered by data access level).
+
+---
+
+# GitHub API Scripts
+
+Two small scripts demonstrating real API integration patterns: calling a public, unauthenticated endpoint, and calling an authenticated endpoint using a personal access token stored as an environment variable.
+
+## What they do
+
+github_api_test.py calls GitHub's public API (no credentials required) to pull user and repository data, and demonstrates working with both single JSON objects and lists of objects.
+
+github_auth_test.py calls an authenticated GitHub endpoint using a personal access token read from an environment variable (GITHUB_TOKEN), demonstrating credential handling via headers rather than hardcoded secrets.
+
+## How to run it
+
+1. From the repo root, move into this project's folder:
+
+cd project-03-github-api
+pip install requests
+
+2. For the authenticated script, set your token as an environment variable first:
+
+export GITHUB_TOKEN="your_personal_access_token"
+
+3. Run either script:
+
+python github_api_test.py
+python github_auth_test.py
+
+## Relevance
+
+Demonstrates the foundational pattern behind every real API integration used later in this repo: a URL, optional headers carrying a token for authentication, and a GET request to retrieve data as JSON.
 
 ---
 
@@ -112,21 +169,22 @@ Same evidence-trail approach as the Vendor Risk Scorer — nothing is overwritte
 
 ## How to run it
 
-1. Create an IAM user with an access key (not the AWS root account) and set the following as environment variables:
+1. From the repo root, move into this project's folder and create an IAM user with an access key (not the AWS root account), then set the following as environment variables:
 
+cd project-04-iam-auditor
 export AWS_ACCESS_KEY_ID="your_access_key_id"
 export AWS_SECRET_ACCESS_KEY="your_secret_access_key"
 export AWS_DEFAULT_REGION="your_region"
 
-2. Install boto3:
+2. Install boto3 and fpdf2:
 
-pip install boto3
+pip install boto3 fpdf2
 
 3. Run the script:
 
 python iam_auditor.py
 
-4. Check the generated dated report file in the project folder.
+4. Check the generated dated report files in this folder.
 
 ## SOC 2 relevance
 
@@ -161,7 +219,10 @@ Each run generates a dated set of reports:
 
 ## How to run it
 
-1. Set AWS credentials as environment variables (see IAM Auditor setup above).
+1. From the repo root, move into this project's folder. Set AWS credentials as environment variables (see IAM Auditor setup above).
+
+cd project-04-s3-checker
+
 2. Install boto3 and fpdf2 if not already installed:
 
 pip install boto3 fpdf2
@@ -170,7 +231,7 @@ pip install boto3 fpdf2
 
 python s3_checker.py
 
-4. Check the generated dated report files in the project folder.
+4. Check the generated dated report files in this folder.
 
 ## SOC 2 relevance
 
@@ -198,7 +259,10 @@ Each run generates a dated set of reports:
 
 ## How to run it
 
-1. Set AWS credentials as environment variables (see IAM Auditor setup above).
+1. From the repo root, move into this project's folder. Set AWS credentials as environment variables (see IAM Auditor setup above).
+
+cd project-04-unused-access-finder
+
 2. Install boto3 and fpdf2 if not already installed:
 
 pip install boto3 fpdf2
@@ -207,11 +271,11 @@ pip install boto3 fpdf2
 
 python unused_access_finder.py
 
-4. Check the generated dated report files in the project folder.
+4. Check the generated dated report files in this folder.
 
 ## SOC 2 relevance
 
-This maps to CC6 — Logical and Physical Access Controls, specifically the principle of least privilege and periodic access review: credentials that exist but are never used represent unnecessary risk and should be identified, reviewed, and deactivated or removed.git status
+This maps to CC6 — Logical and Physical Access Controls, specifically the principle of least privilege and periodic access review: credentials that exist but are never used represent unnecessary risk and should be identified, reviewed, and deactivated or removed.
 
 ---
 
@@ -235,17 +299,20 @@ Each run generates a dated set of reports:
 
 ## How to run it
 
-1. Set AWS credentials as environment variables (see IAM Auditor setup above).
+1. From the repo root, move into this project's folder. Set AWS credentials as environment variables (see IAM Auditor setup above).
+
+cd project-05-cross-system-review
+
 2. Install boto3 and fpdf2 if not already installed:
 
 pip install boto3 fpdf2
 
-3. Ensure hr_roster.csv is present in the project folder (columns: name, department, status).
+3. Ensure hr_roster.csv is present in this folder (columns: name, department, status).
 4. Run the script:
 
 python cross_system_review.py
 
-5. Check the generated dated report files in the project folder.
+5. Check the generated dated report files in this folder.
 
 ## SOC 2 relevance
 
