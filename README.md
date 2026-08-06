@@ -321,3 +321,24 @@ This directly reflects a core offboarding/deprovisioning control under CC6 — L
 ## A note on the data
 
 The HR roster (hr_roster.csv) is synthetic data generated for this project and does not represent any real company or individuals. The AWS side of this comparison is live, real data pulled from a personal AWS lab account.
+
+---
+
+# Automated Scheduling (GitHub Actions)
+
+The IAM Auditor runs automatically on a daily schedule using GitHub Actions, with no manual steps required. This turns a script you'd otherwise run by hand into a real, unattended compliance check.
+
+## What it does
+
+A workflow defined in .github/workflows/iam-audit.yml triggers automatically once a day (cron schedule) and can also be triggered manually from the Actions tab in GitHub. Each run: checks out the repository, installs Python dependencies, runs project-04-iam-auditor/iam_auditor.py using AWS credentials stored as encrypted GitHub Actions secrets, and uploads the generated TXT/CSV/PDF reports as a downloadable artifact.
+
+## Why this matters
+
+This is the same pattern used in real compliance automation: a control test that used to require someone to remember to run it manually now runs itself, every day, and produces evidence automatically. AWS credentials are never stored in the code or committed to the repo — they live only in GitHub's encrypted secrets store and are injected into the workflow at runtime.
+
+## How to view a run
+
+1. Go to the repository's "Actions" tab on GitHub.
+2. Click "IAM Audit" to see the run history.
+3. Click any individual run to see step-by-step logs, or download the generated report from the "Artifacts" section of that run's summary page.
+4. Use the "Run workflow" button to trigger a run manually at any time, without waiting for the daily schedule.
