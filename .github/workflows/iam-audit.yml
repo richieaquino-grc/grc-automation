@@ -1,0 +1,39 @@
+name: IAM Audit
+
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-iam-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install boto3 fpdf2
+
+      - name: Run IAM auditor
+        working-directory: project-04-iam-auditor
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: python iam_auditor.py
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iam-audit-report
+          path: |
+            project-04-iam-auditor/iam_audit_*.csv
+            project-04-iam-auditor/iam_audit_*.txt
+            project-04-iam-auditor/iam_audit_*.pdf
