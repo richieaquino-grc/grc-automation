@@ -373,6 +373,8 @@ This maps to CC6 — Logical and Physical Access Controls, applied to a second l
 
 The service account used to run this script holds only the Viewer role — it can read IAM policy but cannot modify anything, including its own permissions. This mirrors the least-privilege principle the script itself is checking for.
 
+---
+
 # Automated Scheduling (GitHub Actions)
 
 The IAM Auditor runs automatically on a daily schedule using GitHub Actions, with no manual steps required. This turns a script you'd otherwise run by hand into a real, unattended compliance check.
