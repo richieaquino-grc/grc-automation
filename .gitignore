@@ -19,3 +19,5 @@ unused_access_*.pdf
 cross_system_review_*.csv
 cross_system_review_*.txt
 cross_system_review_*.pdf
+secrets/
+*.json
