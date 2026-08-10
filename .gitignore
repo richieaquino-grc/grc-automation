@@ -21,3 +21,4 @@ cross_system_review_*.txt
 cross_system_review_*.pdf
 secrets/
 *.json
+gcp_access_review_*.csv
