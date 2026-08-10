@@ -322,7 +322,55 @@ This directly reflects a core offboarding/deprovisioning control under CC6 — L
 
 The HR roster (hr_roster.csv) is synthetic data generated for this project and does not represent any real company or individuals. The AWS side of this comparison is live, real data pulled from a personal AWS lab account.
 
+
 ---
+
+# GCP Access Review
+
+A Python script that authenticates with a GCP service account key and pulls the live IAM policy for a Google Cloud project via the Cloud Resource Manager API, flagging any identity with Owner or Editor access — the GCP equivalent of admin-level privilege.
+
+## What it does
+
+Connects to a GCP project using a dedicated service account (itself scoped to read-only Viewer access) and evaluates every IAM role binding in the project:
+
+- Owner / Editor roles — flagged as high-privilege, since these grant broad write access (Owner also controls IAM itself).
+- All other roles (e.g., Viewer) — pass, since they carry no meaningful write or admin capability.
+
+Every binding — user or service account — receives an explicit PASS or FAIL, so the report shows the full access picture, not just the flagged findings.
+
+## Output formats
+
+Each run generates a dated set of reports, matching the format of the other live-API projects in this repo:
+
+- gcp_access_review_YYYY-MM-DD.txt — plain-text summary
+- gcp_access_review_YYYY-MM-DD.csv — spreadsheet-friendly format
+- gcp_access_review_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
+
+## How to run it
+
+1. From the repo root, move into this project's folder and activate the shared virtual environment:
+
+cd project-06-gcp-access-review
+source ../venv/bin/activate
+
+2. Install dependencies:
+
+pip install google-api-python-client google-auth fpdf2
+
+3. Place a GCP service account key (JSON, scoped to Viewer on the target project) at ../secrets/gcp-service-account-key.json. This path is covered by .gitignore and is never committed.
+4. Run the script:
+
+python gcp_access_review.py
+
+5. Check the generated dated report files in this folder.
+
+## SOC 2 relevance
+
+This maps to CC6 — Logical and Physical Access Controls, applied to a second live cloud environment alongside the AWS projects in this repo. It demonstrates that the same access-review pattern — authenticate, pull live identity data, flag admin-equivalent privilege — generalizes across cloud providers rather than being AWS-specific.
+
+## A note on scope
+
+The service account used to run this script holds only the Viewer role — it can read IAM policy but cannot modify anything, including its own permissions. This mirrors the least-privilege principle the script itself is checking for.
 
 # Automated Scheduling (GitHub Actions)
 
