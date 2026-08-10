@@ -13,6 +13,7 @@ Each project lives in its own folder. To run a script, `cd` into its folder firs
 - project-04-s3-checker/ — Live AWS S3 bucket audit (encryption + public access)
 - project-04-unused-access-finder/ — Live AWS IAM access key usage audit
 - project-05-cross-system-review/ — AWS IAM cross-referenced against a synthetic HR roster
+- project-06-gcp-access-review/ — Live GCP IAM audit, flagging Owner/Editor access via a service account
 
 ---
 
