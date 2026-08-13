@@ -14,6 +14,7 @@ Each project lives in its own folder. To run a script, `cd` into its folder firs
 - project-04-unused-access-finder/ — Live AWS IAM access key usage audit
 - project-05-cross-system-review/ — AWS IAM cross-referenced against a synthetic HR roster
 - project-06-gcp-access-review/ — Live GCP IAM audit, flagging Owner/Editor access via a service account
+- project-07-1password-vault-audit/ — 1Password vault access review, flagging placement risk and access sprawl
 
 ---
 
@@ -373,6 +374,77 @@ This maps to CC6 — Logical and Physical Access Controls, applied to a second l
 
 The service account used to run this script holds only the Viewer role — it can read IAM policy but cannot modify anything, including its own permissions. This mirrors the least-privilege principle the script itself is checking for.
 
+
+---
+
+# 1Password Vault Access Review
+
+A Python script that audits a 1Password Business account via the `op` CLI, looking for two
+patterns that a simple "who has access to what" list doesn't surface on its own: credentials
+placed in overly broad vaults, and individual access grants sitting outside a team's normal
+access path.
+
+## What it does
+
+Connects to 1Password using an already-authenticated CLI session and evaluates every vault
+against two checks:
+
+- Vault placement risk — flags service/system-looking credentials (titles matching keywords like
+  "test," "admin," "service," or a known SaaS name) sitting in a vault with broad, company-wide
+  access (the default "Team Members" group). A credential that looks like infrastructure shouldn't
+  be reachable by the whole company by default.
+- Access sprawl — flags individuals with direct, individual access to a vault that a
+  team-specific group already covers, excluding admin-level and default-group access. A
+  standing grant sitting alongside the "official" access path is the kind of thing that gets
+  forgotten and never reviewed.
+
+This project is modeled on a real access-review gap: a test credential saved into a
+broadly-shared vault, visible to far more people than intended, undetected for an extended
+period until discovered by chance. The two checks above are aimed directly at catching that
+pattern automatically instead of by accident.
+
+## Output formats
+
+Each run generates a dated set of reports:
+
+- vault_access_review_YYYY-MM-DD.txt — plain-text summary
+- vault_access_review_YYYY-MM-DD.csv — spreadsheet-friendly format
+- vault_access_review_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
+
+## How to run it
+
+1. Install the 1Password CLI and authenticate:
+
+brew install --cask 1password-cli
+op account add
+eval $(op signin)
+
+2. From the repo root, move into this project's folder and activate the shared virtual environment:
+
+cd project-07-1password-vault-audit
+source ../venv/bin/activate
+
+3. Install dependencies:
+
+pip install fpdf2
+
+4. Run the script:
+
+python vault_access_review.py
+
+5. Check the generated dated report files in this folder.
+
+## SOC 2 relevance
+
+This maps to CC6 — Logical and Physical Access Controls, extended to a credential vault rather
+than a cloud IAM system. Vault-level access review is a common but often-overlooked SOC 2 finding
+area: identity and access management controls tend to focus on cloud/SaaS systems, leaving the
+system that stores the credentials to those systems itself unreviewed.
+
+## A note on scope
+
+This script only reads data the authenticated `op` CLI session already has access to. It never
+stores, logs, or transmits the account password, Secret Key, or any vault item contents.
 ---
 
 # Automated Scheduling (GitHub Actions)

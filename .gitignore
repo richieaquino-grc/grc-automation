@@ -24,3 +24,6 @@ secrets/
 gcp_access_review_*.txt
 gcp_access_review_*.csv
 gcp_access_review_*.pdf
+vault_access_review_*.txt
+vault_access_review_*.csv
+vault_access_review_*.pdf
