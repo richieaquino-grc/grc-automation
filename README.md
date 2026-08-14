@@ -16,6 +16,16 @@ Each project lives in its own folder. To run a script, `cd` into its folder firs
 - project-06-gcp-access-review/ — Live GCP IAM audit, flagging Owner/Editor access via a service account
 - project-07-1password-vault-audit/ — 1Password vault access review, flagging placement risk and access sprawl
 
+## A note on data and scope
+
+Every account, credential, and dataset in this repository was created specifically for this
+portfolio, on personal hardware, using personal email addresses and personal cloud/SaaS trial
+accounts (AWS, GCP, GitHub, 1Password). No company data, private data, or personally identifiable
+information appears anywhere in this repo. No employer, current or former, is named or
+identifiable anywhere in this repository or its history. Any resemblance between a synthetic
+finding here and a real-world scenario is a reflection of common, well-documented failure modes
+in access management -- not a description of any specific organization's environment.
+
 ## Control catalog
 
 control_catalog.yaml, at the repo root, is the judgment layer behind every script in this
