@@ -1,0 +1,162 @@
+# Control Catalog
+#
+# One entry per control tested by a script in this repo. This catalog is the judgment layer --
+# most fields here are decisions about risk and ownership, not code. The scripts implement what
+# this file specifies; this file is what makes the scripts defensible as a program rather than
+# a pile of one-off checks.
+#
+# Schema notes:
+#   - vanta_custom_test_id is left blank until a control is actually pushed to Vanta as a
+#     custom test (see project-06 for the collector pattern that would do this).
+#   - pci_ref is populated only where a control genuinely overlaps PCI DSS scope.
+#   - iso_ref is intentionally left empty across the board -- this repo has never tested against
+#     an ISO 27001 control set. Extending to a new framework means populating this column with
+#     real mappings, not writing new code.
+
+- control_id: AM-01
+  risk_objective: Access Management
+  description: User accounts are authenticated (MFA) and periodically reviewed for staleness
+  risk_hypothesis: An account exists without MFA enabled, or has not logged in within the policy
+    window, and continues to hold standing access
+  proportionality: Baseline access control test -- applies to any system where an unauthenticated
+    or abandoned account represents unmonitored risk
+  owner: IT
+  evidence_source: Synthetic user roster (users.csv)
+  collector: project-01-access-review/access_review.py
+  severity: medium
+  escalation: notify owner same day; manager if open >7 days
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.2, CC6.3
+  pci_ref:
+  iso_ref:
+
+- control_id: TP-01
+  risk_objective: Third-Party Risk Management
+  description: Vendors with access to company data have a SOC 2 report on file and a current
+    risk assessment
+  risk_hypothesis: A vendor holds data access without a SOC 2 report on record, or its last risk
+    assessment is overdue for its risk tier
+  proportionality: Vendor risk is tiered by data access level -- critical/high risk vendors
+    require annual reassessment, medium/low risk every two years
+  owner: GRC
+  evidence_source: Synthetic vendor roster (vendors.csv)
+  collector: project-02-vendor-risk-scorer/vendor_risk.py
+  severity: high
+  escalation: notify vendor owner same day; manager if open >14 days
+  vanta_custom_test_id:
+  soc2_ref: CC9.2
+  pci_ref: Requirement 12.8 (service provider management)
+  iso_ref:
+
+- control_id: AM-02
+  risk_objective: Access Management
+  description: AWS IAM users have MFA enforced and console passwords in active use
+  risk_hypothesis: An IAM user exists with no registered MFA device, or a console password that
+    has not been used within the policy window
+  proportionality: Live AWS account -- IAM users hold direct access to production-shaped
+    infrastructure, so this is the highest-stakes version of AM-01 in the portfolio
+  owner: IT
+  evidence_source: AWS IAM API (live)
+  collector: project-04-iam-auditor/iam_auditor.py
+  severity: high
+  escalation: notify owner same day; manager if open >3 days
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.2, CC6.3
+  pci_ref: Requirement 8.3 (MFA)
+  iso_ref:
+
+- control_id: DP-01
+  risk_objective: Data Protection
+  description: S3 buckets enforce encryption at rest and block public access
+  risk_hypothesis: A bucket exists without server-side encryption, or without public access
+    blocking fully enabled, exposing data at rest or to the internet
+  proportionality: Storage misconfiguration is one of the most common real-world data exposure
+    causes -- proportional to any bucket holding non-public data
+  owner: IT
+  evidence_source: AWS S3 API (live)
+  collector: project-04-s3-checker/s3_checker.py
+  severity: high
+  escalation: notify owner same day; manager immediately if bucket is public
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.7
+  pci_ref: Requirement 3.5 (protect stored cardholder data)
+  iso_ref:
+
+- control_id: AM-03
+  risk_objective: Access Management
+  description: IAM access keys in active use; unused keys are identified for review
+  risk_hypothesis: An access key exists with no usage in the policy window, or has never been
+    used at all, representing standing access with no business justification
+  proportionality: Least-privilege principle -- unused live credentials carry risk without
+    providing value, regardless of the account's overall risk tier
+  owner: IT
+  evidence_source: AWS IAM API (live)
+  collector: project-04-unused-access-finder/unused_access_finder.py
+  severity: medium
+  escalation: notify owner; deactivate if unconfirmed after 14 days
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.2, CC6.3
+  pci_ref:
+  iso_ref:
+
+- control_id: AM-04
+  risk_objective: Access Management
+  description: AWS IAM users map to a currently active employee record; terminated employees
+    have no live access
+  risk_hypothesis: An IAM account exists for a terminated employee (orphaned account), or an
+    account exists with no matching HR record and no documented exception
+  proportionality: Offboarding/deprovisioning is a core CC6 control -- delayed revocation is one
+    of the highest-frequency real audit findings
+  owner: IT / HR (joint)
+  evidence_source: AWS IAM API (live) cross-referenced against synthetic HR roster
+    (hr_roster.csv)
+  collector: project-05-cross-system-review/cross_system_review.py
+  severity: high
+  escalation: notify owner same day; manager if open >1 day (terminated employee access is
+    time-sensitive)
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.2, CC6.3
+  pci_ref: Requirement 8.1.3 (immediate revocation on termination)
+  iso_ref:
+
+- control_id: AM-05
+  risk_objective: Access Management
+  description: GCP identities are authorized and match the directory; no identity holds
+    Owner/Editor without justification
+  risk_hypothesis: An identity exists in GCP with no corresponding active employee, or holds
+    Owner/Editor role without a documented reason
+  proportionality: GCP hosts production workloads; any identity there reaches customer data.
+    Owner/Editor are GCP's admin-equivalent roles
+  owner: IT
+  evidence_source: GCP IAM API (live) vs Google Workspace directory
+  collector: project-06-gcp-access-review/gcp_access_review.py
+  severity: high
+  escalation: notify owner same day; manager if open >3 days
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.2, CC6.3
+  pci_ref:
+  iso_ref:
+
+- control_id: AM-06
+  risk_objective: Access Management
+  description: Credentials in the vault system are placed in appropriately-scoped vaults, and
+    individual access grants are reviewable against team-based access
+  risk_hypothesis: A service/system credential is stored in a vault with broad, company-wide
+    access rather than a scoped one; or an individual holds direct vault access outside a
+    documented team-group path
+  proportionality: Modeled directly on a real incident -- a test credential saved into a
+    broadly-shared vault, visible to far more people than intended, undetected for weeks. The
+    credential vault itself is a system that holds access to every other system, making its own
+    access review a first-order control, not a secondary one
+  owner: IT
+  evidence_source: 1Password Business (live) via CLI (point-in-time) and Events API (near
+    real-time item creation/usage)
+  collector: project-07-1password-vault-audit/vault_access_review.py,
+    project-07-1password-vault-audit/itemusage_monitor.py
+  severity: high
+  escalation: notify owner immediately; manager same day if item is a system/service credential
+    in a broad vault
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.6
+  pci_ref: Requirement 8.2 (unique credential management)
+  iso_ref:

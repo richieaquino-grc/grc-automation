@@ -16,6 +16,17 @@ Each project lives in its own folder. To run a script, `cd` into its folder firs
 - project-06-gcp-access-review/ — Live GCP IAM audit, flagging Owner/Editor access via a service account
 - project-07-1password-vault-audit/ — 1Password vault access review, flagging placement risk and access sprawl
 
+## Control catalog
+
+control_catalog.yaml, at the repo root, is the judgment layer behind every script in this
+portfolio. Each entry maps one control to its risk hypothesis, proportionality reasoning, owner,
+severity, escalation path, and framework references (SOC 2, and PCI DSS where relevant) --
+independent of which script implements it. The scripts enforce what this file specifies; the
+catalog is what makes them defensible as a program rather than a collection of one-off checks.
+
+iso_ref is intentionally left empty across every entry. Extending this repo to a new compliance
+framework means populating that column with real mappings, not writing new code -- the
+architecture is designed so evidence collection and framework mapping are separate concerns.
 ---
 
 # Access Review Automation
