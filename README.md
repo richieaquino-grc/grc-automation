@@ -1,6 +1,15 @@
 # GRC Automation Portfolio
 
-A collection of Python scripts automating SOC 2 control tests and access reviews, built as a hands-on learning project to transition from traditional GRC into GRC engineering. Each project follows the same core pattern: pull data (from a file or a live API), apply a compliance rule, and report findings in text, CSV, and PDF formats with a dated evidence trail.
+A collection of Python scripts automating SOC 2 control tests and access reviews, built as a
+hands-on learning project. What started
+as file-based control tests has grown into live audits against real cloud and SaaS environments
+AWS, Google Cloud, and 1Password including near-real-time detection via event streaming,
+not just point-in-time snapshots. One script runs on an automated daily schedule via GitHub
+Actions. A control catalog (control_catalog.yaml) ties every script back to a documented risk
+hypothesis, owner, and framework mapping, so the collection reads as a program rather than a set
+of one-off checks. Each project still follows the same core pattern underneath: pull data,
+apply a compliance rule, and report findings in text, CSV, and PDF formats with a dated evidence
+trail.
 
 ## Project structure
 
