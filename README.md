@@ -33,18 +33,18 @@ accounts (AWS, GCP, GitHub, 1Password). No company data, private data, or person
 information appears anywhere in this repo. No employer, current or former, is named or
 identifiable anywhere in this repository or its history. Any resemblance between a synthetic
 finding here and a real-world scenario is a reflection of common, well-documented failure modes
-in access management -- not a description of any specific organization's environment.
+in access management not a description of any specific organization's environment.
 
 ## Control catalog
 
 control_catalog.yaml, at the repo root, is the judgment layer behind every script in this
 portfolio. Each entry maps one control to its risk hypothesis, proportionality reasoning, owner,
-severity, escalation path, and framework references (SOC 2, and PCI DSS where relevant) --
+severity, escalation path, and framework references (SOC 2, and PCI DSS where relevant)
 independent of which script implements it. The scripts enforce what this file specifies; the
 catalog is what makes them defensible as a program rather than a collection of one-off checks.
 
 iso_ref is intentionally left empty across every entry. Extending this repo to a new compliance
-framework means populating that column with real mappings, not writing new code -- the
+framework means populating that column with real mappings, not writing new code the
 architecture is designed so evidence collection and framework mapping are separate concerns.
 ---
 
@@ -501,8 +501,9 @@ pip install requests
 python itemusage_monitor.py
 
 The script saves its position (a cursor) to `.itemusage_cursor.json` after each run, so
-subsequent runs only pick up new events instead of re-fetching or missing anything in between --
+subsequent runs only pick up new events instead of re-fetching or missing anything in between 
 the same pattern a real scheduled job would need.
+
 ---
 
 # Automated Scheduling (GitHub Actions)
@@ -523,3 +524,4 @@ This is the same pattern used in real compliance automation: a control test that
 2. Click "IAM Audit" to see the run history.
 3. Click any individual run to see step-by-step logs, or download the generated report from the "Artifacts" section of that run's summary page.
 4. Use the "Run workflow" button to trigger a run manually at any time, without waiting for the daily schedule.
+   
