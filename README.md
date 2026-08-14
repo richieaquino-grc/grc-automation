@@ -445,6 +445,34 @@ system that stores the credentials to those systems itself unreviewed.
 
 This script only reads data the authenticated `op` CLI session already has access to. It never
 stores, logs, or transmits the account password, Secret Key, or any vault item contents.
+
+## Stretch goal: item usage monitor
+
+A second script, `itemusage_monitor.py`, polls the 1Password Events API directly (not the CLI)
+for item usage and creation events, cross-referenced against the same broad-vault definition as
+the access review. It flags `server-create` events landing in a broad-access vault -- the exact
+moment a credential is created somewhere far more people can see it than intended, which is the
+root event this whole project is modeled on, not just a downstream symptom of it.
+
+### How to run it
+
+1. In the 1Password Business admin console, go to Integrations -> Events Reporting -> Other, and
+   create an Events Reporting integration with a bearer token scoped to at least `itemusages`.
+2. Export the token as an environment variable -- never hardcode it, never commit it:
+
+export OP_EVENTS_TOKEN="your_token_here"
+
+3. Install the additional dependency:
+
+pip install requests
+
+4. Run the script:
+
+python itemusage_monitor.py
+
+The script saves its position (a cursor) to `.itemusage_cursor.json` after each run, so
+subsequent runs only pick up new events instead of re-fetching or missing anything in between --
+the same pattern a real scheduled job would need.
 ---
 
 # Automated Scheduling (GitHub Actions)

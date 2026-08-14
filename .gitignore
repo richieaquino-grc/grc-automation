@@ -27,3 +27,7 @@ gcp_access_review_*.pdf
 vault_access_review_*.txt
 vault_access_review_*.csv
 vault_access_review_*.pdf
+itemusage_monitor_*.txt
+itemusage_monitor_*.csv
+itemusage_monitor_*.pdf
+.itemusage_cursor.json
