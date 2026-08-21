@@ -444,6 +444,31 @@ Each run generates a dated set of reports:
 - vault_access_review_YYYY-MM-DD.csv — spreadsheet-friendly format
 - vault_access_review_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered table
 
+## Sample output
+
+Real output from a run against the synthetic vaults in the personal 1Password trial account
+built for this project. Full files are in
+[project-07-1password-vault-audit/sample-output/](project-07-1password-vault-audit/sample-output/)
+(the CSV renders as a sortable table on GitHub).
+
+```
+1Password Vault Access Review
+Run date: 2026-08-12
+Total findings: 3
+High-priority (vault placement risk): 2
+
+[FLAG] ACCESS_SPRAWL_CHECK -- Customer-Support-Test / Bob
+    Individual grant alongside team group access (custom group(s): Support Team). Verify this person needs direct access outside the group path.
+[FAIL] VAULT_PLACEMENT_RISK -- Shared / Slack Workspace Admin
+    Service-looking credential in a broad-access vault (groups: Administrators, Owners, Team Members)
+[FAIL] VAULT_PLACEMENT_RISK -- Shared / Zendesk Test Account (untracked)
+    Service-looking credential in a broad-access vault (groups: Administrators, Owners, Team Members)
+```
+
+The two FAIL lines are the pattern this project exists to catch: a service-looking credential
+sitting in a vault the whole company can open, found by a scheduled check rather than by
+someone stumbling across it.
+
 ## How to run it
 
 1. Install the 1Password CLI and authenticate:
@@ -542,6 +567,34 @@ repo:
 - role_change_alert_YYYY-MM-DD.csv — spreadsheet-friendly format
 - role_change_alert_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered
   table
+
+## Sample output
+
+Output from a run against the synthetic change-request data in this folder. Full files are in
+[project-08-netsuite-role-change-alert/sample-output/](project-08-netsuite-role-change-alert/sample-output/)
+(the CSV renders as a sortable table on GitHub).
+
+```
+NetSuite Role-Change Early Warning
+Run date: 2026-08-21
+Total requests reviewed: 7
+Unreviewed and urgent (FAIL): 4
+Unreviewed, early warning (FLAG): 2
+Median lead time across all requests: 21.0 days
+
+[FAIL] Marcus Webb (Engineering) -- departure
+    Senior Engineer -> (departing) | entered 2026-08-10, effective 2026-08-22 (lead time 12d)
+    No access review on file and the change takes effect in 1 day(s). This needed review days ago.
+[FAIL] Sam Okafor (Operations) -- leave_of_absence
+    Operations Coordinator -> (on leave of absence) | entered 2026-08-15, effective 2026-08-24 (lead time 9d)
+    No access review on file and the change takes effect in 3 day(s). This needed review days ago.
+[FLAG] Elena Torres (Marketing) -- maternity_leave
+    Marketing Manager -> (on maternity leave) | entered 2026-07-20, effective 2026-09-01 (lead time 43d)
+    No access review yet, but 11 day(s) of lead time remain before it takes effect. Early warning, not yet urgent.
+```
+
+The lead time figures are the point: each of these was entered into the HR system 9 to 43 days
+before it takes effect, but without a check like this, IT typically hears about it a day out.
 
 ## How to run it
 

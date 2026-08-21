@@ -1,0 +1,4 @@
+type,status,vault,item,detail
+ACCESS_SPRAWL_CHECK,FLAG,Customer-Support-Test,Bob,Individual grant alongside team group access (custom group(s): Support Team). Verify this person needs direct access outside the group path.
+VAULT_PLACEMENT_RISK,FAIL,Shared,Slack Workspace Admin,"Service-looking credential in a broad-access vault (groups: Administrators, Owners, Team Members)"
+VAULT_PLACEMENT_RISK,FAIL,Shared,Zendesk Test Account (untracked),"Service-looking credential in a broad-access vault (groups: Administrators, Owners, Team Members)"

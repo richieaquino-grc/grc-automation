@@ -1,0 +1,11 @@
+1Password Vault Access Review
+Run date: 2026-08-12
+Total findings: 3
+High-priority (vault placement risk): 2
+
+[FLAG] ACCESS_SPRAWL_CHECK -- Customer-Support-Test / Bob
+    Individual grant alongside team group access (custom group(s): Support Team). Verify this person needs direct access outside the group path.
+[FAIL] VAULT_PLACEMENT_RISK -- Shared / Slack Workspace Admin
+    Service-looking credential in a broad-access vault (groups: Administrators, Owners, Team Members)
+[FAIL] VAULT_PLACEMENT_RISK -- Shared / Zendesk Test Account (untracked)
+    Service-looking credential in a broad-access vault (groups: Administrators, Owners, Team Members)

@@ -1,0 +1,8 @@
+employee,department,change_type,current_role,proposed_role,request_entered_date,effective_date,lead_time_days,days_until_effective,status,detail
+Priya Nair,Support,role_change,Support Associate,Support Associate (Part-Time),2026-08-05,2026-08-26,21,5,FAIL,No access review on file and the change takes effect in 5 day(s). This needed review days ago.
+Marcus Webb,Engineering,departure,Senior Engineer,(departing),2026-08-10,2026-08-22,12,1,FAIL,No access review on file and the change takes effect in 1 day(s). This needed review days ago.
+Jordan Kim,Sales,department_move,Account Executive,Marketing Specialist,2026-08-01,2026-08-21,20,0,FAIL,No access review on file and the change takes effect in 0 day(s). This needed review days ago.
+Layla Haddad,Finance,role_change,Analyst,Senior Analyst,2026-08-01,2026-09-15,45,25,PASS,Access reviewed. Lead time was 45 days.
+Devon Ruiz,IT,role_change,Sysadmin,IT Manager,2026-08-18,2026-09-20,33,30,FLAG,"No access review yet, but 30 day(s) of lead time remain before it takes effect. Early warning, not yet urgent."
+Sam Okafor,Operations,leave_of_absence,Operations Coordinator,(on leave of absence),2026-08-15,2026-08-24,9,3,FAIL,No access review on file and the change takes effect in 3 day(s). This needed review days ago.
+Elena Torres,Marketing,maternity_leave,Marketing Manager,(on maternity leave),2026-07-20,2026-09-01,43,11,FLAG,"No access review yet, but 11 day(s) of lead time remain before it takes effect. Early warning, not yet urgent."

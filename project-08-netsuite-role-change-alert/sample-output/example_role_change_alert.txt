@@ -1,0 +1,28 @@
+NetSuite Role-Change Early Warning
+Run date: 2026-08-21
+Total requests reviewed: 7
+Unreviewed and urgent (FAIL): 4
+Unreviewed, early warning (FLAG): 2
+Median lead time across all requests: 21.0 days
+
+[FAIL] Priya Nair (Support) -- role_change
+    Support Associate -> Support Associate (Part-Time) | entered 2026-08-05, effective 2026-08-26 (lead time 21d)
+    No access review on file and the change takes effect in 5 day(s). This needed review days ago.
+[FAIL] Marcus Webb (Engineering) -- departure
+    Senior Engineer -> (departing) | entered 2026-08-10, effective 2026-08-22 (lead time 12d)
+    No access review on file and the change takes effect in 1 day(s). This needed review days ago.
+[FAIL] Jordan Kim (Sales) -- department_move
+    Account Executive -> Marketing Specialist | entered 2026-08-01, effective 2026-08-21 (lead time 20d)
+    No access review on file and the change takes effect in 0 day(s). This needed review days ago.
+[PASS] Layla Haddad (Finance) -- role_change
+    Analyst -> Senior Analyst | entered 2026-08-01, effective 2026-09-15 (lead time 45d)
+    Access reviewed. Lead time was 45 days.
+[FLAG] Devon Ruiz (IT) -- role_change
+    Sysadmin -> IT Manager | entered 2026-08-18, effective 2026-09-20 (lead time 33d)
+    No access review yet, but 30 day(s) of lead time remain before it takes effect. Early warning, not yet urgent.
+[FAIL] Sam Okafor (Operations) -- leave_of_absence
+    Operations Coordinator -> (on leave of absence) | entered 2026-08-15, effective 2026-08-24 (lead time 9d)
+    No access review on file and the change takes effect in 3 day(s). This needed review days ago.
+[FLAG] Elena Torres (Marketing) -- maternity_leave
+    Marketing Manager -> (on maternity leave) | entered 2026-07-20, effective 2026-09-01 (lead time 43d)
+    No access review yet, but 11 day(s) of lead time remain before it takes effect. Early warning, not yet urgent.
