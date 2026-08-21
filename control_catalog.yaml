@@ -163,11 +163,13 @@
 
 - control_id: AM-07
   risk_objective: Access Management
-  description: Employee role, department, and departure changes have an access review on
-    file before or promptly after they take effect
-  risk_hypothesis: A role/position change request exists in the HR system of record with no
-    access review yet, and its effective date is close enough that access is likely to be
-    misaligned with the person's actual duties
+  description: Employee role changes, department moves, departures, and leave (leave of
+    absence, maternity leave) have an access review on file before or promptly after they
+    take effect
+  risk_hypothesis: A role, department, or leave-status change request exists in the HR system
+    of record with no access review yet, and its effective date is close enough that access
+    is likely to be misaligned with the person's actual status. A daily-or-so review cadence
+    is sufficient here; these changes do not require same-hour detection
   proportionality: Modeled on a real, recurring finding -- IT often learns of a position
     change the day before or day of, sometimes from a coworker rather than HR, even though
     the HR system's own change-request record is entered weeks earlier. This is a wire that

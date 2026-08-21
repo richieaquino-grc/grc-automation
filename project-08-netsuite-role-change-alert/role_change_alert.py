@@ -1,16 +1,19 @@
 """
 role_change_alert.py
 
-Flags employee role, department, and departure changes that haven't had an access review
-yet, using a scheduled export of HR system-of-record change-request data (modeled on
-NetSuite/SuitePeople's change request record) instead of a live API connection.
+Flags employee role changes, department moves, departures, and leave (including leave of
+absence and maternity leave) that haven't had an access review yet, using a scheduled export
+of HR system-of-record change-request data (modeled on NetSuite/SuitePeople's change request
+record) instead of a live API connection.
 
-The problem this targets: a position change is usually entered into the HR system well
-before it takes effect, but IT often only finds out the day before or the day of, sometimes
-from a coworker instead of HR. That's not a gap in the HR data -- the change request record
-already exists with a proposed effective date, often weeks out. It's a gap in what gets
-looked at. This script reads the same kind of record and flags any request that doesn't yet
-have an access review, ranked by how close the effective date is.
+The problem this targets: a position or status change is usually entered into the HR system
+well before it takes effect, but IT often only finds out the day before or the day of,
+sometimes from a coworker instead of HR. That's not a gap in the HR data -- the change
+request record already exists with a proposed effective date, often weeks out. It's a gap in
+what gets looked at. This script reads the same kind of record and flags any request that
+doesn't yet have an access review, ranked by how close the effective date is. A daily or
+every-other-day run is enough here; these changes don't need to be caught within the hour,
+just within a day or two.
 
 Auth: none. Reads a scheduled CSV export (role_change_requests.csv) -- the same file a real
 version would receive from a scheduled saved-search export, not a live credential. Only
