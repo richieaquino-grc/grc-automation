@@ -4,7 +4,9 @@ A collection of Python scripts automating SOC 2 control tests and access reviews
 hands-on learning project. What started
 as file-based control tests has grown into live audits against real cloud and SaaS environments
 AWS, Google Cloud, and 1Password including near-real-time detection via event streaming,
-not just point-in-time snapshots. One script runs on an automated daily schedule via GitHub
+not just point-in-time snapshots, plus a credential-free early-warning check against HR
+system-of-record data (modeled on NetSuite/SuitePeople). One script runs on an automated
+daily schedule via GitHub
 Actions. A control catalog (control_catalog.yaml) ties every script back to a documented risk
 hypothesis, owner, and framework mapping, so the collection reads as a program rather than a set
 of one-off checks. Each project still follows the same core pattern underneath: pull data,
@@ -24,6 +26,7 @@ Each project lives in its own folder. To run a script, `cd` into its folder firs
 - project-05-cross-system-review/ — AWS IAM cross-referenced against a synthetic HR roster
 - project-06-gcp-access-review/ — Live GCP IAM audit, flagging Owner/Editor access via a service account
 - project-07-1password-vault-audit/ — 1Password vault access review, flagging placement risk and access sprawl
+- project-08-netsuite-role-change-alert/ — Early warning for employee role/departure changes, using a scheduled HR export instead of a live credential
 
 ## A note on data and scope
 
@@ -503,6 +506,75 @@ python itemusage_monitor.py
 The script saves its position (a cursor) to `.itemusage_cursor.json` after each run, so
 subsequent runs only pick up new events instead of re-fetching or missing anything in between 
 the same pattern a real scheduled job would need.
+
+---
+
+# NetSuite Role-Change Early Warning
+
+A Python script that flags employee role, department, and departure changes that don't yet
+have an access review, using a scheduled export of HR system-of-record change-request data
+(modeled on NetSuite/SuitePeople) instead of a live API connection.
+
+## What it does
+
+Reads a list of role-change requests and evaluates each one against how much lead time
+remains before it takes effect:
+
+- Reviewed — flags nothing further; the access review is already on file.
+- Unreviewed and urgent (FAIL) — no access review on file and the change takes effect within
+  7 days.
+- Unreviewed, early warning (FLAG) — no access review on file yet, but more than 7 days of
+  lead time remain before the change takes effect.
+
+Every request receives an explicit PASS, FAIL, or FLAG, along with its lead time (days
+between when the request was entered and when it takes effect) — the same metric the pitch
+for this project is built around, since the underlying problem isn't missing data, it's a
+review that isn't happening early enough to matter.
+
+## Output formats
+
+Each run generates a dated set of reports, matching the format of the other projects in this
+repo:
+
+- role_change_alert_YYYY-MM-DD.txt — plain-text summary
+- role_change_alert_YYYY-MM-DD.csv — spreadsheet-friendly format
+- role_change_alert_YYYY-MM-DD.pdf — formatted report with a title, timestamp, and bordered
+  table
+
+## How to run it
+
+1. From the repo root, move into this project's folder and activate the shared virtual
+   environment:
+
+cd project-08-netsuite-role-change-alert
+source ../venv/bin/activate
+
+2. Install dependencies:
+
+pip install fpdf2
+
+3. Run the script:
+
+python role_change_alert.py
+
+4. Check the generated dated report files in this folder.
+
+## SOC 2 relevance
+
+This maps to CC6 — Logical and Physical Access Controls, specifically the requirement that
+access is modified in a timely manner when a person's role changes, not just when they're
+terminated. Offboarding tends to get audit attention; role and department changes, which
+happen far more often, tend not to.
+
+## A note on data and credentials
+
+role_change_requests.csv is synthetic data generated for this project and does not represent
+any real company or individuals. This script also needs no live NetSuite (or any HR system)
+access at all. A real version would only need a scheduled export of a short, named list of
+ordinary fields, name, department, current and proposed role, and two dates, never pay,
+birth date, home address, or free-text justification fields. Whoever owns the HR system could
+approve that export list directly, without it requiring a security review of a live
+credential.
 
 ---
 

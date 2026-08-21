@@ -31,3 +31,6 @@ itemusage_monitor_*.txt
 itemusage_monitor_*.csv
 itemusage_monitor_*.pdf
 .itemusage_cursor.json
+role_change_alert_*.txt
+role_change_alert_*.csv
+role_change_alert_*.pdf

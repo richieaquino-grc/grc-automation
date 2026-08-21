@@ -160,3 +160,26 @@
   soc2_ref: CC6.1, CC6.6
   pci_ref: Requirement 8.2 (unique credential management)
   iso_ref:
+
+- control_id: AM-07
+  risk_objective: Access Management
+  description: Employee role, department, and departure changes have an access review on
+    file before or promptly after they take effect
+  risk_hypothesis: A role/position change request exists in the HR system of record with no
+    access review yet, and its effective date is close enough that access is likely to be
+    misaligned with the person's actual duties
+  proportionality: Modeled on a real, recurring finding -- IT often learns of a position
+    change the day before or day of, sometimes from a coworker rather than HR, even though
+    the HR system's own change-request record is entered weeks earlier. This is a wire that
+    isn't connected yet, not a new report HR would need to produce
+  owner: IT / HR (joint)
+  evidence_source: Scheduled export of HR system-of-record change-request data (modeled on
+    NetSuite/SuitePeople), not a live API credential
+  collector: project-08-netsuite-role-change-alert/role_change_alert.py
+  severity: medium
+  escalation: notify owner if unreviewed and effective date is within 7 days; manager if
+    still unreviewed on the effective date
+  vanta_custom_test_id:
+  soc2_ref: CC6.1, CC6.2, CC6.3
+  pci_ref:
+  iso_ref:

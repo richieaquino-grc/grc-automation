@@ -1,0 +1,6 @@
+employee_name,department,current_role,proposed_role,change_type,request_entered_date,effective_date,access_reviewed
+Priya Nair,Support,Support Associate,Support Associate (Part-Time),role_change,2026-08-05,2026-08-26,no
+Marcus Webb,Engineering,Senior Engineer,(departing),departure,2026-08-10,2026-08-22,no
+Jordan Kim,Sales,Account Executive,Marketing Specialist,department_move,2026-08-01,2026-08-21,no
+Layla Haddad,Finance,Analyst,Senior Analyst,role_change,2026-08-01,2026-09-15,yes
+Devon Ruiz,IT,Sysadmin,IT Manager,role_change,2026-08-18,2026-09-20,no
