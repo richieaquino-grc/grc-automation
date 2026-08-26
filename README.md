@@ -538,9 +538,8 @@ the same pattern a real scheduled job would need.
 
 A Python script that flags employee role changes, department moves, departures, and leave
 (including leave of absence and maternity leave) that don't yet have an access review, using
-a scheduled export of HR system-of-record change-request data (modeled on NetSuite/SuitePeople)
-instead of a live API connection. A daily or every-other-day export is enough for this,
-these changes don't need to be caught within the hour.
+a scheduled export of HR system-of-record change-request data (modeled on NetSuite/)
+instead of a live API connection. A daily or every-other-day export.
 
 ## What it does
 
