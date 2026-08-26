@@ -5,7 +5,7 @@ hands-on learning project. What started
 as file-based control tests has grown into live audits against real cloud and SaaS environments
 AWS, Google Cloud, and 1Password including near-real-time detection via event streaming,
 not just point-in-time snapshots, plus a credential-free early-warning check against HR
-system-of-record data (modeled on NetSuite/SuitePeople). One script runs on an automated
+system-of-record data (modeled on NetSuite). One script runs on an automated
 daily schedule via GitHub
 Actions. A control catalog (control_catalog.yaml) ties every script back to a documented risk
 hypothesis, owner, and framework mapping, so the collection reads as a program rather than a set
